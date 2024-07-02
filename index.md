@@ -8,13 +8,11 @@ title:  "The Guide"
 
 ## 1 - Introduction
 
-This document serves as the **complete** definition of NimbleUser's coding standards for source code in the [Apex Programming Language](https://developer.salesforce.com/page/Apex_Code:_The_World's_First_On-Demand_Programming_Language). An Apex source file is described as being _in NimbleUser Style_ if and only if it adheres to the rules herein.
+This document serves as the **complete** definition of Hillspire's coding standards for source code in the [Apex Programming Language](https://developer.salesforce.com/page/Apex_Code:_The_World's_First_On-Demand_Programming_Language). An Apex source file is described as being _in Hillspire Style_ if and only if it adheres to the rules herein.
 
-Like other programming style guides, the issues covered span not only aesthetic issues of formatting, but other types of conventions or coding standards as well. However, this document focuses primarily on the **hard-and-fast rules** that we follow universally, and avoids giving _advice_ that isn't clearly enforceable (whether by human or tool).
+Like other programming style guides, the issues covered span not only aesthetic issues of formatting, but other types of conventions or coding standards as well. Wherever possible, this document focuses on the **hard-and-fast rules** that we follow universally, bot sometimes _advice_ that may not be clearly enforceable is included.
 
-This is a fork of the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), adapted and ported to the Apex Programming Language by [Craig Ceremuga](https://github.com/cceremuga) with the immensely helpful input and feedback of the entire NimbleUser technical consulting and engineering staff.
-
-Collaborators are welcome and the Markdown source code can be found on the [NimbleUser GitHub organization](https://github.com/NimbleUser/apex-style-guide/).
+This is a fork of the [NimbleUser Style Guide](https://nimbleuser.github.io/apex-style-guide/), which is a fork of the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), adapted and ported to the Apex Programming Language by [Craig Ceremuga](https://github.com/cceremuga).
 
 ### 1.1 - Terminology notes
 
@@ -28,7 +26,7 @@ Other "terminology notes" will appear occasionally throughout the document.
 
 ### 1.2 - Guide notes
 
-Example code in this document is **non-normative**. That is, while the examples are in NimbleUser Style, they may not illustrate the _only_ stylish way to represent the code. Optional formatting choices made in examples should not be enforced as rules.
+Example code in this document is **non-normative**. That is, while the examples are in Hillspire Style, they may not illustrate the _only_ stylish way to represent the code. Optional formatting choices made in examples should not be enforced as rules.
 
 ## 2 - Source file basics
 
@@ -120,7 +118,7 @@ Examples:
             callToSomeMethod();
         } else {
             callToAnotherMethod();
-        }    
+        }
     }
 
 See section 4.6.2 for horizontal whitespace style.
@@ -145,7 +143,7 @@ Examples:
 
 ### 4.2 - Block indentation: +4 spaces
 
-Each time a new block or block-like construct is opened, the indent increases by two spaces. When the block ends, the indent returns to the previous indent level. The indent level applies to both code and comments throughout the block. (See the example in Section 4.1.2, Nonempty blocks: K & R Style.)
+Each time a new block or block-like construct is opened, the indent increases by four spaces. When the block ends, the indent returns to the previous indent level. The indent level applies to both code and comments throughout the block. (See the example in Section 4.1.2, Nonempty blocks: K & R Style.)
 
 ### 4.3 - One statement per line
 
@@ -255,21 +253,25 @@ But does not apply to:
 
 This rule is never interpreted as requiring or forbidding additional space at the start or end of a line; it addresses only _interior_ space.
 
-#### 4.6.3 - Horizontal alignment: never required
+#### 4.6.3 - Trailing Whitespace
+
+Trailing white space at the end of the line should be deleted. Make use of the [Trailing Spaces](https://marketplace.visualstudio.com/items?itemName=shardulm94.trailing-spaces) or similar extension to help with this.
+
+The exception is that there may be a single empty line at the end of a file.
+
+#### 4.6.4 - Horizontal alignment: never required
 
 **Terminology Note:** _Horizontal alignment_ is the practice of adding a variable number of additional spaces in your code with the goal of making certain tokens appear directly below certain other tokens on previous lines.
 
-This practice is permitted, but is **never required** by NimbleUser Style. It is not even required to _maintain_ horizontal alignment in places where it was already used.
+Use of _Horizontal alignment_ should be avoided.
 
 Here is an example without alignment, then using alignment:
 
     private Integer x; // this is fine
-    private String str; // this too
+    private String str;
 
-    private Integer   x;      // permitted, but future edits
-    private String str;  // may leave it unaligned
-
-**Tip:** Alignment can aid readability, but it creates problems for future maintenance. Consider a future change that needs to touch just one line. This change may leave the formerly-pleasing formatting mangled, and that is **allowed**. More often it prompts the coder (perhaps you) to adjust whitespace on nearby lines as well, possibly triggering a cascading series of reformattings. That one-line change now has a "blast radius." This can at worst result in pointless busywork, but at best it still corrupts version history information, slows down reviewers and exacerbates merge conflicts.
+    private Integer       x;      // not permitted
+    private String variable;
 
 ### 4.7 - Grouping parentheses: recommended
 
@@ -369,7 +371,7 @@ Identifiers use only ASCII letters and digits, and, in a small number of cases n
 
 The platform reserves use of two consecutive underscores in a name (double underscore). A double underscore cannot be used in a developer name.
 
-In NimbleUser Style special prefixes or suffixes, like those seen in the examples `name_`, `mName`, `s_name` and `kName`, are **not** used.
+In Hillspire Style special prefixes or suffixes, like those seen in the examples `name_`, `mName`, `s_name` and `kName`, are **not** used.
 
 ### 5.2 - Rules by identifier type
 
@@ -435,9 +437,34 @@ Property names are written in UpperCamelCase.
 
 All SOQL and SOSL reserved words are written in all uppercase letters.
 
+### 5.4 - Variable Naming Conventions
+
+Variable names should be clear and descriptive.  Single letters should be avoided.  Opt for longer more descriptive variable names over comments describing variables.
+
+### 5.4.1 - Variable Prefixes and Suffixes
+
+Prefixes or suffixes of the variable type should be avoided when unnecessary
+
+    Integer countInt; // the Int at the end doesn't add anything to clarity so it should not be used
+    Id contactId; // The Id at the end helps specify that it is an Id value versus a contact object, so it is ok to include
+
+### 5.4.2 - Map Variable Names
+
+Maps should be named using the format valueByKey.
+
+In the key references the same object type as the values, then there is no need to restate the object in the name;
+
+    Map<Id, Contacts> contactsById = new Map<Id, Contacts>();
+    Map<String, Contacts> contactsByName = new Map<Id, Contacts>();
+
+If the key references a separate object, be sure to make that clear in the variable names;
+
+    Map<Id, Contacts> contactsByUserId = new Map<Id, Contacts>();
+    Map<String, Contacts> contactsByUserName = new map<String, Contacts>();
+
 ### 5.3 - Camel case: defined
 
-Sometimes there is more than one reasonable way to convert an English phrase into camel case, such as when acronyms or unusual constructs like "IPv6" or "iOS" are present. To improve predictability, NimbleUser Style specifies the following (nearly) deterministic scheme.
+Sometimes there is more than one reasonable way to convert an English phrase into camel case, such as when acronyms or unusual constructs like "IPv6" or "iOS" are present. To improve predictability, Hillspire Style specifies the following (nearly) deterministic scheme.
 
 Beginning with the prose form of the name:
 
@@ -538,6 +565,8 @@ The name of a test method is descriptive as to what method is being tested, what
         ...
     }
 
+Test method names should not include the word 'test' in them as this is repetitive.
+
 ##### 8.1.2.1 - SeeAllData
 
 The `@isTest(SeeAllData=true)` test setting should be avoided unless absolutely necessary. Part of writing safe, high quality tests is to ensure that your test data is unchanging.
@@ -559,48 +588,19 @@ In a test method, the `Test.startTest()` and `Test.stopTest()` method calls are 
         SObject actualRecord = testController.getRecord(testRecordId);
         Test.stopTest();
 
-        System.assertNotEquals(null, actualRecord, 'Did not expect to retrieve a null record.');
-        System.assertEquals(testRecordId, actualRecord.Id, 'Expected to retrieve the test record.');
+        Assert.areNotEqual(null, actualRecord, 'Did not expect to retrieve a null record.');
+        Assert.areEqual(testRecordId, actualRecord.Id, 'Expected to retrieve the test record.');
     }
 
-### 8.2 - Mocking
+##### 8.1.2.3 - Asserting
 
-When possible, utilize mocking functionality. Mocking cuts down on test execution time by decoupling your code from the Salesforce database when running tests which interact with SObject records.
+Use the newer Assert class instead of the System.assert... methods.
 
-One such way is via the [FinancialForce fflib-apex-common open source project](https://github.com/financialforcedev/fflib-apex-common). This allows for convenient mocking.
+All tests classes should include at least one Assert statement.  Tests that only exist to have coverage without actually testing anything are not allowed.
 
-#### 8.2.1 - Class Considerations
+##### 8.1.2.4 - Test Scope
 
-When utilizing mocking, it is required by the platform to have access to a constructor which is `public` or `global` and contains zero arguments.
-
-If you do not wish to expose a zero argument constructor in a given class, you can declare a `@testVisible`, `protected` constructor.
-
-    public virtual without sharing class Example {
-        /**
-         * @description A protected constructor solely for mocking purposes.
-         */
-        @testVisible
-        protected Example() { }
-
-        /**
-         * @description Constructs an instance of Example with the specified record Id.
-         * @param recordId The record Id to use for instantiation.
-         * @throws ArgumentNullException if Id is null.
-         */
-        public Example(Id recordId) {
-            ...
-        }
-    }
-
-#### 8.2.2 - Method Considerations
-
-When restricting code blocks for purposes of mocking, check if the mock instance is `null` prior to checking if `Test.isRunningTest()`.
-
-This lessens the opportunity for any such performance bottlenecks that could occur at runtime during the checking of `Test.isRunningTest()` as it is secondary to the mockking `null` check.
-
-    if (mockInstance != null && Test.isRunningTest()) {
-        return mockInstance;
-    }
+Each test method should test a specific part of the code.  If a method has multiple paths, then each path should have it's own test method.
 
 <script src="assets/jquery-3.2.1.min.js"></script>
 <script src="assets/toc.js"></script>
